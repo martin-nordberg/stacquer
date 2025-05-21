@@ -1,5 +1,4 @@
-
-import { describe, expect, test } from 'vitest'
+import {describe, expect, test} from 'vitest'
 import {app} from "./index.js";
 
 describe('Example', () => {

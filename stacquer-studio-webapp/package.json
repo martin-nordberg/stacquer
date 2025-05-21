@@ -1,5 +1,5 @@
 {
-  "name": "stacquer-webapp",
+  "name": "stacquer-studio-webapp",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
