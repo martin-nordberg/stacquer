@@ -11,7 +11,7 @@
     "outDir": "./dist",
     "paths": {
       "$shared/*": [
-        "../stacquer-shared/src/*"
+        "../../shared/stacquer-shared/src/*"
       ]
     }
   },
