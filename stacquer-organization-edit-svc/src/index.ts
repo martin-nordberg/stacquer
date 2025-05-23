@@ -14,7 +14,7 @@ app.route('/organizations', organizationRoutes)
 
 serve({
     fetch: app.fetch,
-    port: 3000
+    port: 3101
 }, (info) => {
     console.log(`Server is running on http://localhost:${info.port}`)
 })

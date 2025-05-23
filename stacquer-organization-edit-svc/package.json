@@ -1,5 +1,5 @@
 {
-  "name": "stacquer-studio-webapp",
+  "name": "stacquer-organization-edit-svc",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",

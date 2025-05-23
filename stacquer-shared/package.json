@@ -1,0 +1,22 @@
+{
+  "name": "stacquer-shared",
+  "version": "0.1.0",
+  "description": "Shared components for Stacquer.",
+  "type": "module",
+  "author": "Martin E. Nordberg III",
+  "license": "MIT",
+  "scripts": {
+    "type-check": "tsc",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@js-joda/core": "^5.6.4",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@sinclair/typebox": "^0.34.33"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}

@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest'
-import {app} from "./index.js";
+import {app} from "../src/index.js";
 
 describe('Example', () => {
     test('GET /', async () => {
