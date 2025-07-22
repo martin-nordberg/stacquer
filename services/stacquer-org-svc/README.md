@@ -1,2 +1,0 @@
-
-# Stacquer Organization Editing Service
