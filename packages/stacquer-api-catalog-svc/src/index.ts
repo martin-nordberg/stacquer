@@ -3,7 +3,7 @@ import { Hono } from 'hono'
 const app = new Hono()
 
 app.get('/', (c) => {
-  return c.text('This is the API catalog service.')
+  return c.text('This is the Stacquer API catalog service.')
 })
 
 export default {

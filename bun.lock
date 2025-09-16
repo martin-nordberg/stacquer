@@ -4,6 +4,19 @@
     "": {
       "name": "stacquer",
     },
+    "apps/stacquer-studio": {
+      "name": "stacquer-studio",
+      "version": "0.0.0",
+      "dependencies": {
+        "@solidjs/router": "",
+        "solid-js": "^1.9.7",
+      },
+      "devDependencies": {
+        "typescript": "~5.8.3",
+        "vite": "^7.0.4",
+        "vite-plugin-solid": "^2.11.7",
+      },
+    },
     "packages/stacquer-api-catalog-svc": {
       "name": "stacquer-api-catalog-svc",
       "dependencies": {
@@ -47,18 +60,6 @@
       },
       "devDependencies": {
         "@types/bun": "latest",
-      },
-    },
-    "packages/stacquer-studio": {
-      "name": "stacquer-studio",
-      "version": "0.0.0",
-      "dependencies": {
-        "solid-js": "^1.9.7",
-      },
-      "devDependencies": {
-        "typescript": "~5.8.3",
-        "vite": "^7.0.4",
-        "vite-plugin-solid": "^2.11.7",
       },
     },
     "packages/stacquer-studio-webapp": {
@@ -210,6 +211,8 @@
 
     "@rollup/rollup-win32-x64-msvc": ["@rollup/rollup-win32-x64-msvc@4.45.1", "", { "os": "win32", "cpu": "x64" }, "sha512-M/fKi4sasCdM8i0aWJjCSFm2qEnYRR8AMLG2kxp6wD13+tMGA4Z1tVAuHkNRjud5SW2EM3naLuK35w9twvf6aA=="],
 
+    "@solidjs/router": ["@solidjs/router@0.15.3", "", { "peerDependencies": { "solid-js": "^1.8.6" } }, "sha512-iEbW8UKok2Oio7o6Y4VTzLj+KFCmQPGEpm1fS3xixwFBdclFVBvaQVeibl1jys4cujfAK5Kn6+uG2uBm3lxOMw=="],
+
     "@types/babel__core": ["@types/babel__core@7.20.5", "", { "dependencies": { "@babel/parser": "^7.20.7", "@babel/types": "^7.20.7", "@types/babel__generator": "*", "@types/babel__template": "*", "@types/babel__traverse": "*" } }, "sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA=="],
 
     "@types/babel__generator": ["@types/babel__generator@7.27.0", "", { "dependencies": { "@babel/types": "^7.0.0" } }, "sha512-ufFd2Xi92OAVPYsy+P4n7/U7e68fex0+Ee8gSG9KX7eo084CWiQ4sdxktvdl0bOPupXtVJPY19zk6EwWqUQ8lg=="],
@@ -310,7 +313,7 @@
 
     "stacquer-schema-editing-svc": ["stacquer-schema-editing-svc@workspace:packages/stacquer-schema-editing-svc"],
 
-    "stacquer-studio": ["stacquer-studio@workspace:packages/stacquer-studio"],
+    "stacquer-studio": ["stacquer-studio@workspace:apps/stacquer-studio"],
 
     "stacquer-studio-webapp": ["stacquer-studio-webapp@workspace:packages/stacquer-studio-webapp"],
 
