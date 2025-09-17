@@ -5,7 +5,7 @@ import {A} from "@solidjs/router";
 function Home() {
     // The fetcher function
     const fetchAbout = async () => {
-        const response = await fetch(`http://localhost:3000/about`);
+        const response = await fetch(`http://10.0.0.3:3000/about`);
         return response.json();
     };
 

@@ -4,7 +4,7 @@ import { cors } from 'hono/cors'
 const app = new Hono()
 
 app.use('*', cors({
-  origin: 'http://localhost:5173'
+  origin: ['http://localhost:5173', 'http://10.0.0.3:5173']
 }));
 
 app.get('/', (c) => {
