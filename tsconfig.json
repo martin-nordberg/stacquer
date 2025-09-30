@@ -1,12 +1,12 @@
 {
   "files": [],
   "references": [
-    { "path": "./apps/stacquer-studio" },
+    { "path": "./client"},
     { "path": "./packages/stacquer-api-catalog-svc" },
     { "path": "./packages/stacquer-api-editing-svc" },
     { "path": "./packages/stacquer-org-editing-svc" },
     { "path": "./packages/stacquer-schema-catalog-svc" },
     { "path": "./packages/stacquer-schema-editing-svc" },
-    { "path": "./packages/stacquer-studio-webapp" }
+    { "path": "./server"}
   ]
 }

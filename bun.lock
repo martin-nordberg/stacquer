@@ -8,7 +8,7 @@
       "name": "stacquer-studio",
       "version": "0.0.0",
       "dependencies": {
-        "@solidjs/router": "",
+        "@solidjs/router": "^0.15.3",
         "solid-js": "^1.9.7",
       },
       "devDependencies": {

@@ -1,0 +1,10 @@
+
+
+pg
+slonik
+node-pg-migrate
+
+
+
+https://github.com/gajus/slonik
+https://synvinkel.org/notes/node-postgres-migrations
