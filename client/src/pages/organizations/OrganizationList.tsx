@@ -5,7 +5,7 @@ import OrganizationsBreadCrumb from "../../components/breadcrumbs/OrganizationsB
 function OrganizationList(_props: any) {
 
     const fetchOrganizations = async () => {
-        const response = await fetch(`http://10.0.0.3:3000/organizations`)
+        const response = await fetch(`http://10.0.0.3:3001/organizations`)
         return response.json()
     }
 

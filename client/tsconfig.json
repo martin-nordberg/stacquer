@@ -1,7 +1,28 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json"},
-    { "path": "./tsconfig.node.json"}
-  ]
+  "extends": "../shared/tsconfig.options.json",
+  "compilerOptions": {
+    // General
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "target": "ESNext",
+
+    // Modules
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+
+    // Type Checking & Safety
+    "types": ["vite/client"],
+
+    // Code Sharing
+    "baseUrl": "./",
+    "paths": {
+      "$shared/*": ["../shared/src/*"]
+    }
+  },
+  "include": ["src", "../shared/src"]
 }
+

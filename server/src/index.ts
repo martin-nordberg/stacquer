@@ -1,10 +1,11 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import type {Branded} from "$shared/util/Branded.ts";
 
 const app = new Hono()
 
 app.use('*', cors({
-  origin: ['http://localhost:5173', 'http://10.0.0.3:5173']
+  origin: ['http://localhost:3000', 'http://10.0.0.3:3000']
 }));
 
 app.get('/', (c) => {
@@ -19,6 +20,9 @@ app.get('/about', (c) => {
 })
 
 app.get('/organizations', async (c) => {
+    const x : Branded<string, 'whatever'> = "asdgfasdfasdf" as Branded<string, 'whatever'>
+    console.log("x = ", x)
+
     const mockOrgs = [
         {
             id: 'abc123',
@@ -49,4 +53,7 @@ app.get('/organizations', async (c) => {
     return c.json(mockOrgs)
 })
 
-export default app
+export default {
+    port: 3001,
+    fetch: app.fetch,
+}
