@@ -9,7 +9,6 @@
 
     // Bundler mode
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "noEmit": true,
 
     // Code Sharing
@@ -18,5 +17,5 @@
       "$shared/*": ["../shared/src/*"]
     }
   },
-  "include": ["src", "../shared/src"]
+  "include": ["src", "test", "../shared/src"]
 }

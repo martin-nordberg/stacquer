@@ -1,26 +1,32 @@
-import { Hono } from 'hono'
-import { cors } from 'hono/cors'
+import {Hono} from 'hono'
+import {cors} from 'hono/cors'
 import type {Branded} from "$shared/util/Branded.ts";
+import {packageRoutes} from "$shared/routes/structure/PackageRoutes.ts";
+import {PackageMockService} from "./mockservices/structure/PackageMockService.ts";
+import {commandRoutes} from "$shared/routes/commands/CommandRoutes.ts";
 
 const app = new Hono()
 
 app.use('*', cors({
-  origin: ['http://localhost:3000', 'http://10.0.0.3:3000']
+    origin: ['http://localhost:3000', 'http://10.0.0.3:3000']
 }));
 
+app.route('/commands', commandRoutes(new PackageMockService()))
+app.route('/queries/packages', packageRoutes(new PackageMockService()))
+
 app.get('/', (c) => {
-  return c.text('This is the Stacquer Studio web application.')
+    return c.text('This is the Stacquer Studio web application.')
 })
 
 app.get('/about', (c) => {
-  return c.json({
-    name: 'Stacquer Studio',
-    version: 0.1
-  })
+    return c.json({
+        name: 'Stacquer Studio',
+        version: 0.1
+    })
 })
 
 app.get('/organizations', async (c) => {
-    const x : Branded<string, 'whatever'> = "asdgfasdfasdf" as Branded<string, 'whatever'>
+    const x: Branded<string, 'whatever'> = "asdgfasdfasdf" as Branded<string, 'whatever'>
     console.log("x = ", x)
 
     const mockOrgs = [

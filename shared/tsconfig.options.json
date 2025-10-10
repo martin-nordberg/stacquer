@@ -12,7 +12,6 @@
     "skipLibCheck": true,
     "target": "es2022",
     "verbatimModuleSyntax": true,
-
     /* Strictness */
     "strict": true,
     "allowUnusedLabels": false,
@@ -25,7 +24,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": true
   }
 }
 

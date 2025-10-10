@@ -2,12 +2,8 @@
   "name": "stacquer",
   "private": true,
   "workspaces": [
-    "apps/stacquer-studio",
-    "packages/stacquer-api-catalog-svc",
-    "packages/stacquer-api-editing-svc",
-    "packages/stacquer-org-editing-svc",
-    "packages/stacquer-schema-catalog-svc",
-    "packages/stacquer-schema-editing-svc",
-    "packages/stacquer-studio-webapp"
+    "client",
+    "shared",
+    "server"
   ]
 }
