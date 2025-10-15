@@ -1,12 +1,12 @@
 import {z} from "zod";
-import {packageCreationCmdSchema, packageUpdateCmdSchema} from "../../domain/structure/Package";
+import {packageCreationSchema, packageUpdateSchema} from "../../domain/structure/Package";
 
 
 export const commandSchema = z.discriminatedUnion(
     "cmd",
     [
-        packageCreationCmdSchema,
-        packageUpdateCmdSchema
+        packageCreationSchema,
+        packageUpdateSchema
     ]
 )
 

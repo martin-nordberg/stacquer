@@ -16,7 +16,6 @@ const PackageAddLink = (props: PackageAddLinkProps) => {
         const id = genPackageId()
 
         await packageClientService.createPackage({
-            cmd: 'package-create',
             id,
             name: "newpackage",
             parentPackage: {

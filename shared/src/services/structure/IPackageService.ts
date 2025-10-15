@@ -1,4 +1,4 @@
-import {type Package, type PackageCreationCmd, type PackageId, type PackageUpdateCmd} from "../../domain/structure/Package";
+import {type Package, type PackageCreation, type PackageId, type PackageUpdate} from "../../domain/structure/Package";
 
 
 export interface IPackageQueryService {
@@ -15,9 +15,9 @@ export interface IPackageQueryService {
 export interface IPackageCommandService {
 
     /** Creates a new package. */
-    createPackage(packageJson: PackageCreationCmd): Promise<Package>
+    createPackage(packageJson: PackageCreation): Promise<Package>
 
     /** Updates a package's attributes. */
-    updatePackage(packageJson: PackageUpdateCmd): Promise<Package>
+    updatePackage(packageJson: PackageUpdate): Promise<Package>
 
 }

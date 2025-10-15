@@ -2,7 +2,7 @@
 import { hc } from 'hono/client'
 import {type PackageRoutes} from "$shared/routes/structure/PackageRoutes";
 import type {IPackageCommandService, IPackageQueryService} from "$shared/services/structure/IPackageService";
-import type {Package, PackageCreationCmd, PackageId, PackageUpdateCmd} from "$shared/domain/structure/Package";
+import type {Package, PackageCreation, PackageId, PackageUpdate} from "$shared/domain/structure/Package";
 import {HTTPException} from "hono/http-exception";
 import type {PackageCmdRoutes} from "$shared/routes/structure/PackageCmdRoutes.ts";
 
@@ -12,13 +12,15 @@ const qryClient = hc<PackageRoutes>('http://10.0.0.3:3001/queries')
 
 export class PackageClientService implements IPackageQueryService, IPackageCommandService {
 
-    async createPackage(packageJson: PackageCreationCmd): Promise<Package> {
+    async createPackage(packageJson: PackageCreation): Promise<Package> {
         console.log("createPackage", packageJson)
         const res = await cmdClient.packages.$post({json: packageJson})
 
         if (res.ok) {
             return res.json()
         }
+
+        console.log(res)
 
         throw new HTTPException(404)
     }
@@ -31,6 +33,8 @@ export class PackageClientService implements IPackageQueryService, IPackageComma
             return res.json()
         }
 
+        console.log(res)
+
         return null
     }
 
@@ -42,16 +46,20 @@ export class PackageClientService implements IPackageQueryService, IPackageComma
             return res.json()
         }
 
+        console.log(res)
+
         throw new HTTPException(404)
     }
 
-    async updatePackage(packageJson: PackageUpdateCmd): Promise<Package> {
+    async updatePackage(packageJson: PackageUpdate): Promise<Package> {
         console.log("updatePackage", packageJson)
         const res = await cmdClient.packages.$patch({json: packageJson})
 
         if (res.ok) {
             return res.json()
         }
+
+        console.log(res)
 
         throw new HTTPException(404)
     }

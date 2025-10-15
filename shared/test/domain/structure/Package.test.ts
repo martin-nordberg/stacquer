@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'bun:test'
 import {
-    genPackageId, packageCreationCmdSchema,
-    packageSchema,
+    genPackageId, packageCreationSchema,
+    packageSchema, packageUpdateSchema,
     rootPackageId
 } from "../../../src/domain/structure/Package";
 
@@ -32,9 +32,8 @@ describe('Sample packages parse correctly', () => {
 
     it('Should parse without error when optional fields are absent', () => {
         const id = genPackageId()
-        const pkg = packageCreationCmdSchema.parse(
+        const pkg = packageCreationSchema.parse(
             {
-                cmd: 'package-create',
                 id: id,
                 parentPackage: {
                     id: rootPackageId,
@@ -71,4 +70,36 @@ describe('Sample packages parse correctly', () => {
             `{"id":"${id}","name":"example","summary":"an example of a package","parentPackage":{"id":"${rootPackageId}","name":"$"},"subPackages":[]}`
         )
     })
+
+    it('Should parse without error for a name change', () => {
+        const id = genPackageId()
+        const pkg = packageUpdateSchema.parse(
+            {
+                id: id,
+                name: 'example'
+            }
+        )
+
+        expect(pkg.id).toBe(id)
+        expect(pkg.name).toBe('example')
+        expect(pkg.summary).toBeUndefined()
+        expect(pkg.description).toBeUndefined()
+    })
+
+    it('Should parse without error for documentation changes', () => {
+        const id = genPackageId()
+        const pkg = packageUpdateSchema.parse(
+            {
+                id: id,
+                summary: 'Revised summary',
+                description: 'A revised description carried over\nmultiple lines.',
+            }
+        )
+
+        expect(pkg.id).toBe(id)
+        expect(pkg.name).toBeUndefined()
+        expect(pkg.summary).toBe("Revised summary")
+        expect(pkg.description).toBe("A revised description carried over\nmultiple lines.")
+    })
+
 })

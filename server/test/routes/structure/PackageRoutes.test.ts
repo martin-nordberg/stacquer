@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'bun:test'
 import app from '../../../src'
-import {genPackageId, packageUpdateCmdSchema, rootPackageId} from "$shared/domain/structure/Package";
+import {genPackageId, packageUpdateSchema, rootPackageId} from "$shared/domain/structure/Package";
 
 describe('Package operations', () => {
     it('Should return the root package', async () => {
@@ -15,7 +15,6 @@ describe('Package operations', () => {
     it('Should create and then find and update a package', async () => {
         const id = genPackageId()
         const pkg = {
-            cmd: 'package-create',
             id: id,
             name: "Sample",
             summary: "An example package",
@@ -61,11 +60,10 @@ describe('Package operations', () => {
         expect(rootPackage.subPackages[0].summary).toBe("An example package")
 
         const pkg4 = {
-            cmd: 'package-update',
             id: id,
             name: "Zample"
         }
-        expect(() => packageUpdateCmdSchema.parse(pkg4)).not.toThrow()
+        expect(() => packageUpdateSchema.parse(pkg4)).not.toThrow()
         const req4 = new Request('http://localhost/commands/packages', {
             method: 'PATCH',
             headers: {
@@ -83,7 +81,6 @@ describe('Package operations', () => {
     it('Should fail to create an unnamed package', async () => {
         const id = genPackageId()
         const pkg = {
-            cmd: 'package-create',
             id: id,
             summary: "An example package",
             parentPackage: {

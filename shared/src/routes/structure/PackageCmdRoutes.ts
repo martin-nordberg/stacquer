@@ -1,7 +1,7 @@
 import {Hono} from 'hono'
 import {type IPackageCommandService} from "../../services/structure/IPackageService";
 import {zxValidator} from "../validation/zxvalidator";
-import {packageCreationCmdSchema, packageUpdateCmdSchema} from "../../domain/structure/Package";
+import {packageCreationSchema, packageUpdateSchema} from "../../domain/structure/Package";
 
 export const packageCmdRoutes = (
     packageService: IPackageCommandService
@@ -10,7 +10,7 @@ export const packageCmdRoutes = (
     return new Hono()
         .post(
             '/',
-            zxValidator('json', packageCreationCmdSchema),
+            zxValidator('json', packageCreationSchema),
             async (c) => {
                 const command = c.req.valid('json')
                 return c.json(await packageService.createPackage(command), 201)
@@ -18,7 +18,7 @@ export const packageCmdRoutes = (
         )
         .patch(
             '/',
-            zxValidator('json', packageUpdateCmdSchema),
+            zxValidator('json', packageUpdateSchema),
             async (c) => {
                 const command = c.req.valid('json')
                 return c.json(await packageService.updatePackage(command), 200)

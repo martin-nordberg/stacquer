@@ -4,11 +4,11 @@ import type {
 } from "$shared/services/structure/IPackageService";
 import {
     type Package,
-    type PackageCreationCmd,
+    type PackageCreation,
     type PackageId,
     packageOverviewSchema,
     packageSchema,
-    type PackageUpdateCmd,
+    type PackageUpdate,
     rootPackageId
 } from "$shared/domain/structure/Package";
 import {checkNonNull} from "$shared/util/Assertions";
@@ -34,7 +34,7 @@ packagesById.set(rootPackageId, rootPackage)
 
 export class PackageMockService implements IPackageQueryService, IPackageCommandService {
 
-    async createPackage(packageJson: PackageCreationCmd): Promise<Package> {
+    async createPackage(packageJson: PackageCreation): Promise<Package> {
         const result: Package = {
             ...packageJson,
             subPackages: []
@@ -61,7 +61,7 @@ export class PackageMockService implements IPackageQueryService, IPackageCommand
         return rootPackage
     }
 
-    async updatePackage(packageJson: PackageUpdateCmd): Promise<Package> {
+    async updatePackage(packageJson: PackageUpdate): Promise<Package> {
         const pkg = await this.findPackageById(packageJson.id)
 
         if (pkg == null) {

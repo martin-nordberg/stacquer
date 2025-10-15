@@ -64,25 +64,25 @@ export type Package = z.infer<typeof packageSchema>
 
 
 /** Sub-schema for package creation. */
-export const packageCreationCmdSchema =
+export const packageCreationSchema =
     z.strictObject({
-        cmd: z.literal('package-create'),
         ...packageDetailsSchema.omit({
             subPackages: true,
         }).shape
     }).readonly()
 
-export type PackageCreationCmd = z.infer<typeof packageCreationCmdSchema>
+export type PackageCreation = z.infer<typeof packageCreationSchema>
 
 
 /** Sub-schema for package updates. */
-export const packageUpdateCmdSchema =
+export const packageUpdateSchema =
     z.strictObject({
-        cmd: z.literal('package-update'),
-        ...packageDetailsSchema.omit({
+        ...packageDetailsSchema.partial({
+            name: true
+        }).omit({
             parentPackage: true,
             subPackages: true,
         }).shape
     }).readonly()
 
-export type PackageUpdateCmd = z.infer<typeof packageUpdateCmdSchema>
+export type PackageUpdate = z.infer<typeof packageUpdateSchema>

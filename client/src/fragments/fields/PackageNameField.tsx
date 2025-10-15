@@ -9,7 +9,6 @@ const PackageNameField = (props: PackageNameFieldProps) => {
 
     const changePackageName = (event: FocusEvent) => {
         packageClientService.updatePackage({
-            cmd: 'package-update',
             id: props.pkg.id,
             name: (event.target as HTMLInputElement).value,
         })
