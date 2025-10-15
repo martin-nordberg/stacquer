@@ -1,14 +1,13 @@
-import RootPackageReadView from "../../components/structure/rootpackage/RootPackageReadView.tsx";
-import HomeBreadCrumb from "../../components/breadcrumbs/HomeBreadCrumb.tsx";
+import RootPackageBrowseView from "../../components/structure/rootpackage/RootPackageBrowseView.tsx";
+import PageTitle from "../../fragments/PageTitle.tsx";
 
 const RootPackagePage = () => {
     // const [pkg] = createResource(() => packageClientService.findRootPackage());
 
     return (
         <>
-            <HomeBreadCrumb name="To Be Fetched"></HomeBreadCrumb>
-
-            <RootPackageReadView></RootPackageReadView>
+            <PageTitle>Top Level Packages</PageTitle>
+            <RootPackageBrowseView></RootPackageBrowseView>
         </>
     )
 }

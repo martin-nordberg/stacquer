@@ -5,5 +5,8 @@
     "client",
     "shared",
     "server"
+  ],
+  "trustedDependencies": [
+    "@tailwindcss/oxide"
   ]
 }

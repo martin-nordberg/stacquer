@@ -22,4 +22,9 @@ export const packageRoutes= (packageService: IPackageQueryService) => {
         )
 }
 
-export type PackageRoutes = ReturnType<typeof packageRoutes>
+/* Unused local function defined purely for its return type, needed by Hono Client. */
+const pkgRoutes = (pkgApp: ReturnType<typeof packageRoutes>) => new Hono().route('/packages', pkgApp)
+
+export type PackageRoutes = ReturnType<typeof pkgRoutes>
+
+

@@ -1,15 +1,17 @@
 import type {
     IPackageCommandService,
     IPackageQueryService
-} from "$shared/services/structure/IPackageService.ts";
+} from "$shared/services/structure/IPackageService";
 import {
-    type Package, type PackageCreationCmd,
+    type Package,
+    type PackageCreationCmd,
     type PackageId,
     packageOverviewSchema,
-    packageSchema, type PackageUpdateCmd,
+    packageSchema,
+    type PackageUpdateCmd,
     rootPackageId
-} from "$shared/domain/structure/Package.ts";
-import {checkNonNull} from "$shared/util/Assertions.ts";
+} from "$shared/domain/structure/Package";
+import {checkNonNull} from "$shared/util/Assertions";
 import {HTTPException} from "hono/http-exception";
 
 
@@ -66,8 +68,15 @@ export class PackageMockService implements IPackageQueryService, IPackageCommand
             throw new HTTPException(404)
         }
 
-        // TODO: make the update
+        const revisedPkg: Package = {
+            ...pkg,
+            name: packageJson.name ?? pkg.name,
+            summary: packageJson.summary ?? pkg.summary,
+            description: packageJson.description ?? pkg.summary,
+        }
 
-        return pkg
+        packagesById.set(revisedPkg.id, revisedPkg)
+
+        return revisedPkg
     }
 }

@@ -4,9 +4,9 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
-    "hono": "4.9.9",
     "@hono/zod-validator": "0.7.3",
     "@paralleldrive/cuid2": "2.2.2",
+    "hono": "4.9.9",
     "zod": "4.1.11"
   },
   "devDependencies": {

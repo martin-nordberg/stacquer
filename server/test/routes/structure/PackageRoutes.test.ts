@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'bun:test'
 import app from '../../../src'
-import {genPackageId, rootPackageId} from "$shared/domain/structure/Package.ts";
+import {genPackageId, packageUpdateCmdSchema, rootPackageId} from "$shared/domain/structure/Package";
 
 describe('Package operations', () => {
     it('Should return the root package', async () => {
@@ -12,7 +12,7 @@ describe('Package operations', () => {
         expect(rootPackage.name).toBe("$")
     })
 
-    it('Should create and then find a package', async () => {
+    it('Should create and then find and update a package', async () => {
         const id = genPackageId()
         const pkg = {
             cmd: 'package-create',
@@ -25,7 +25,7 @@ describe('Package operations', () => {
             }
         }
 
-        const req = new Request('http://localhost/commands', {
+        const req = new Request('http://localhost/commands/packages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,6 +59,25 @@ describe('Package operations', () => {
         expect(rootPackage.subPackages[0].id).toBe(id)
         expect(rootPackage.subPackages[0].name).toBe("Sample")
         expect(rootPackage.subPackages[0].summary).toBe("An example package")
+
+        const pkg4 = {
+            cmd: 'package-update',
+            id: id,
+            name: "Zample"
+        }
+        expect(() => packageUpdateCmdSchema.parse(pkg4)).not.toThrow()
+        const req4 = new Request('http://localhost/commands/packages', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pkg4),
+        });
+        const res4 = await app.fetch(req4)
+        expect(res4.status).toBe(200)
+        const package4: any = await res4.json()
+        expect(package4.id).toBe(id)
+        expect(package4.name).toBe("Zample")
     })
 
     it('Should fail to create an unnamed package', async () => {
@@ -73,7 +92,7 @@ describe('Package operations', () => {
             }
         }
 
-        const req = new Request('http://localhost/commands', {
+        const req = new Request('http://localhost/commands/packages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

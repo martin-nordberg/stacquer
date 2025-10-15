@@ -5,7 +5,7 @@ function HomeBreadCrumb(props: any) {
         <>
             <nav>
                 <ul>
-                    <li><A href="/">Stacquer Studio</A></li>
+                    <li><A href="/" class="text-xl text-green-700">Stacquer Studio</A></li>
                     {props.children}
                 </ul>
             </nav>

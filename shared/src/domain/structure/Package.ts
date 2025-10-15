@@ -79,9 +79,7 @@ export type PackageCreationCmd = z.infer<typeof packageCreationCmdSchema>
 export const packageUpdateCmdSchema =
     z.strictObject({
         cmd: z.literal('package-update'),
-        ...packageDetailsSchema.partial({
-            name: true,
-        }).omit({
+        ...packageDetailsSchema.omit({
             parentPackage: true,
             subPackages: true,
         }).shape

@@ -4,13 +4,17 @@ import {Route, Router} from "@solidjs/router";
 import App from './App.tsx'
 import {lazy} from "solid-js";
 
-const Home = lazy(() => import("./pages/home/./HomePage"));
+import "./index.css"
+import PackagePage from "./pages/structure/PackagePage.tsx";
+
+const HomePage = lazy(() => import("./pages/home/./HomePage"));
 
 const root = document.getElementById('root')
 
 render(() => (
     <Router root={App}>
-        <Route path="/" component={Home} />
+        <Route path="/" component={HomePage} />
+        <Route path="/packages/:id" component={PackagePage} />
     </Router>
 ), root!)
 

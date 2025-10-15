@@ -4,16 +4,17 @@ import {type PackageRoutes} from "$shared/routes/structure/PackageRoutes";
 import type {IPackageCommandService, IPackageQueryService} from "$shared/services/structure/IPackageService";
 import type {Package, PackageCreationCmd, PackageId, PackageUpdateCmd} from "$shared/domain/structure/Package";
 import {HTTPException} from "hono/http-exception";
-import type {CommandRoutes} from "$shared/routes/commands/CommandRoutes";
+import type {PackageCmdRoutes} from "$shared/routes/structure/PackageCmdRoutes.ts";
 
-const cmdClient = hc<CommandRoutes>('http://10.0.0.3:3001/commands')
+const cmdClient = hc<PackageCmdRoutes>('http://10.0.0.3:3001/commands')
 
-const qryClient = hc<PackageRoutes>('http://10.0.0.3:3001/queries/packages')
+const qryClient = hc<PackageRoutes>('http://10.0.0.3:3001/queries')
 
 export class PackageClientService implements IPackageQueryService, IPackageCommandService {
 
     async createPackage(packageJson: PackageCreationCmd): Promise<Package> {
-        const res = await cmdClient.index.$post({json: packageJson})
+        console.log("createPackage", packageJson)
+        const res = await cmdClient.packages.$post({json: packageJson})
 
         if (res.ok) {
             return res.json()
@@ -23,7 +24,8 @@ export class PackageClientService implements IPackageQueryService, IPackageComma
     }
 
     async findPackageById(packageId: PackageId): Promise<Package | null> {
-        const res = await  qryClient.index.$get(packageId)
+        console.log("findPackageById", packageId)
+        const res = await qryClient.packages[':id'].$get({param: {id: packageId}})
 
         if (res.ok) {
             return res.json()
@@ -33,7 +35,8 @@ export class PackageClientService implements IPackageQueryService, IPackageComma
     }
 
     async findRootPackage(): Promise<Package> {
-        const res = await qryClient.index.$get()
+        console.log("findRootPackage")
+        const res = await qryClient.packages.$get()
 
         if (res.ok) {
             return res.json()
@@ -43,7 +46,8 @@ export class PackageClientService implements IPackageQueryService, IPackageComma
     }
 
     async updatePackage(packageJson: PackageUpdateCmd): Promise<Package> {
-        const res = await cmdClient.index.$post({json: packageJson})
+        console.log("updatePackage", packageJson)
+        const res = await cmdClient.packages.$patch({json: packageJson})
 
         if (res.ok) {
             return res.json()
