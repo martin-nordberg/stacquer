@@ -1,16 +1,17 @@
-import type {PackageOverview} from "$shared/domain/structure/Package.ts";
+import {type Package} from "$shared/domain/structure/Package.ts";
 import {A} from "@solidjs/router";
 import {Show} from "solid-js";
 import {TbCornerDownRight, TbFolder} from 'solid-icons/tb'
 
 type PackageLinkProps = {
     fromParent?: boolean | undefined,
-    pkg: PackageOverview,
+    pkg: Package,
     withLink?: boolean | undefined,
     withSummary?: boolean | undefined,
 }
 
 const PackageLink = (props: PackageLinkProps) => {
+
     return (
         <>
             <A class="hover:underline flex items-center gap-1.5" href={"/packages/" + props.pkg.id}>

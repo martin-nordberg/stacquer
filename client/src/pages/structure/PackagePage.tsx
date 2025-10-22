@@ -14,7 +14,7 @@ const PackagePage = () => {
 
     const [pkgId, setPkgId] = createSignal(parsePkgId())
 
-    const [pkg] = createResource(pkgId, () => packageClientService.findPackageById(pkgId()))
+    const [pkg] = createResource(pkgId, () => packageClientService.findPackageGraphById(pkgId()))
 
     createEffect(() => {
         setPkgId(parsePkgId())

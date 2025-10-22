@@ -24,8 +24,8 @@ export const genPackageId: () => PackageId =
     () => packageIdSchema.parse(packageIdPrefix + createId())
 
 
-/** Schema for a brief overview of a package. */
-export const packageOverviewSchema =
+/** Base schema for a Stacquer package's details. */
+export const packageAttributesSchema =
     z.strictObject({
         /** The unique ID of the linked package. */
         id: packageIdSchema,
@@ -35,30 +35,14 @@ export const packageOverviewSchema =
 
         /* A short summary of the package. */
         summary: summarySchema.optional(),
-    })
-export type PackageOverview = z.infer<typeof packageOverviewSchema>
-
-
-/** Schema for a Stacquer package's details. */
-export const packageDetailsSchema =
-    z.strictObject({
-        ...packageOverviewSchema.shape,
 
         /* A longer description of the package. */
         description: descriptionSchema.optional(),
-
-        /** The unique ID of this package's parent package. */
-        parentPackage: packageOverviewSchema,
-
-        /* The unique IDs of child packages within this package. */
-        subPackages: z.array(packageOverviewSchema)
     })
-
-export type PackageDetails = z.infer<typeof packageDetailsSchema>
 
 
 /** Schema for a package. */
-export const packageSchema = packageDetailsSchema.readonly()
+export const packageSchema = packageAttributesSchema.readonly()
 
 export type Package = z.infer<typeof packageSchema>
 
@@ -66,9 +50,8 @@ export type Package = z.infer<typeof packageSchema>
 /** Sub-schema for package creation. */
 export const packageCreationSchema =
     z.strictObject({
-        ...packageDetailsSchema.omit({
-            subPackages: true,
-        }).shape
+        ...packageAttributesSchema.shape,
+        parentPackageId: packageIdSchema
     }).readonly()
 
 export type PackageCreation = z.infer<typeof packageCreationSchema>
@@ -77,12 +60,23 @@ export type PackageCreation = z.infer<typeof packageCreationSchema>
 /** Sub-schema for package updates. */
 export const packageUpdateSchema =
     z.strictObject({
-        ...packageDetailsSchema.partial({
+        ...packageAttributesSchema.partial({
             name: true
-        }).omit({
-            parentPackage: true,
-            subPackages: true,
         }).shape
     }).readonly()
 
 export type PackageUpdate = z.infer<typeof packageUpdateSchema>
+
+
+/** Schema for a package with related items populated. */
+export const packageGraphSchema =
+    z.strictObject({
+        ...packageAttributesSchema.shape,
+
+        parentPackages: packageSchema.array(),
+
+        subPackages: packageSchema.array()
+    }).readonly()
+
+export type PackageGraph = z.infer<typeof packageGraphSchema>
+

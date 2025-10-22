@@ -1,8 +1,8 @@
 import {Hono} from 'hono'
 import {cors} from 'hono/cors'
-import {packageRoutes} from "$shared/routes/structure/PackageRoutes";
+import {packageQryRoutes} from "$shared/routes/structure/PackageQryRoutes";
 import {PackageMockService} from "./mockservices/structure/PackageMockService";
-import {packageCmdRoutes} from "$shared/routes/structure/PackageCmdRoutes";
+import {commandRoutes} from "$shared/routes/commands/CommandRoutes";
 
 const app = new Hono()
 
@@ -13,19 +13,19 @@ app.use('*', cors({
 const packageService = new PackageMockService();
 
 const routes =
-    app.route('/commands/packages', packageCmdRoutes(packageService))
-       .route('/queries/packages', packageRoutes(packageService))
+    app.route('/commands', commandRoutes(packageService))
+        .route('/queries/packages', packageQryRoutes(packageService))
 
-.get('/', (c) => {
-    return c.text('This is the Stacquer Studio web application.')
-})
+        .get('/', (c) => {
+            return c.text('This is the Stacquer Studio web application.')
+        })
 
-.get('/about', (c) => {
-    return c.json({
-        name: 'Stacquer Studio',
-        version: 0.1
-    })
-})
+        .get('/about', (c) => {
+            return c.json({
+                name: 'Stacquer Studio',
+                version: 0.1
+            })
+        })
 
 export type AppType = typeof routes
 

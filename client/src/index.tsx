@@ -1,5 +1,5 @@
 /* @refresh reload */
-import { render } from 'solid-js/web'
+import {render} from 'solid-js/web'
 import {Route, Router} from "@solidjs/router";
 import App from './App.tsx'
 import {lazy} from "solid-js";
@@ -13,8 +13,8 @@ const root = document.getElementById('root')
 
 render(() => (
     <Router root={App}>
-        <Route path="/" component={HomePage} />
-        <Route path="/packages/:id" component={PackagePage} />
+        <Route path="/" component={HomePage}/>
+        <Route path="/packages/:id" component={PackagePage}/>
     </Router>
 ), root!)
 

@@ -1,10 +1,9 @@
-
 function App(props: any) {
     return (
-    <>
-      {props.children}
-    </>
-  )
+        <>
+            {props.children}
+        </>
+    )
 }
 
 export default App

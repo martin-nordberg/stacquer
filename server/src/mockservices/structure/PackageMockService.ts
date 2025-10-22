@@ -1,68 +1,128 @@
-import type {
-    IPackageCommandService,
-    IPackageQueryService
-} from "$shared/services/structure/IPackageService";
+import {type IPackageCmdSvc} from "$shared/commandservices/structure/PackageCmdSvcs";
 import {
     type Package,
-    type PackageCreation,
+    type PackageGraph,
     type PackageId,
-    packageOverviewSchema,
     packageSchema,
-    type PackageUpdate,
     rootPackageId
 } from "$shared/domain/structure/Package";
 import {checkNonNull} from "$shared/util/Assertions";
 import {HTTPException} from "hono/http-exception";
+import {type IPackageQrySvc} from "$shared/queryservices/structure/IPackageQrySvc";
+import {
+    type PackageCreateCmd,
+    type PackageDeleteCmd,
+    type PackageUpdateCmd
+} from "$shared/commandservices/structure/PackageCmdSvcs";
 
 
-let rootPackage = packageSchema.parse(
-    {
+export class PackageMockService implements IPackageQrySvc, IPackageCmdSvc {
+
+    readonly #packagesById = new Map<PackageId, Package>()
+
+    readonly #parentPackagesByChildId = new Map<PackageId, PackageId>()
+
+    readonly #rootPackage: Package = packageSchema.parse({
         id: rootPackageId,
-        parentPackage: {
-            id: rootPackageId,
-            name: "$"
-        },
         name: '$',
         summary: "The root package.",
-        description: "A description can carry over\nmultiple lines.",
-        subPackages: []
+        description: "This is the predefined topmost package.",
+    })
+
+    readonly #subPackagesByParentId = new Map<PackageId, PackageId[]>()
+
+    constructor() {
+        this.#packagesById.set(rootPackageId, this.#rootPackage)
+        this.#subPackagesByParentId.set(rootPackageId, [])
     }
-)
 
-let packagesById = new Map<PackageId, Package>()
-packagesById.set(rootPackageId, rootPackage)
+    async createPackage(cmd: PackageCreateCmd): Promise<void> {
+        const pkg = cmd.payload
+        const parentPackageId = pkg.parentPackageId
 
-export class PackageMockService implements IPackageQueryService, IPackageCommandService {
+        const childPkgIds = this.#subPackagesByParentId.get(parentPackageId) ?? null
+        checkNonNull(childPkgIds, () => `Parent package ID '${parentPackageId}' not found while creating package ${pkg.name}.`)
+        childPkgIds.push(pkg.id)
 
-    async createPackage(packageJson: PackageCreation): Promise<Package> {
-        const result: Package = {
-            ...packageJson,
-            subPackages: []
+        const result = {
+            id: pkg.id,
+            name: pkg.name,
+            summary: pkg.summary,
+            description: pkg.description,
         }
 
-        const parent = await this.findPackageById(result.parentPackage.id)
-        checkNonNull(parent, () => `Parent package '${result.parentPackage.id}' not found.`)
+        this.#packagesById.set(pkg.id, result)
+        this.#parentPackagesByChildId.set(pkg.id, parentPackageId)
+        this.#subPackagesByParentId.set(parentPackageId, childPkgIds)
+        this.#subPackagesByParentId.set(pkg.id, [])
+    }
 
-        parent.subPackages.push(packageOverviewSchema.parse({
-            id: result.id,
-            name: result.name,
-            summary: result.summary,
-        }))
-        packagesById.set(result.id, result)
-
-        return result
+    async deletePackage(cmd: PackageDeleteCmd): Promise<void> {
+        const packageId = cmd.payload
+        const childPkgIds = this.#subPackagesByParentId.get(packageId)
+        checkNonNull(childPkgIds, () => `Package not found for deletion: '${packageId}.`)
+        for (const pkgId of childPkgIds) {
+            await this.deletePackage({...cmd, payload: pkgId})
+        }
+        this.#packagesById.delete(packageId)
+        this.#parentPackagesByChildId.delete(packageId)
+        this.#subPackagesByParentId.delete(packageId)
     }
 
     async findPackageById(packageId: PackageId): Promise<Package | null> {
-        return packagesById.get(packageId) ?? null
+        return this.#packagesById.get(packageId) ?? null
     }
 
-    async findRootPackage(): Promise<Package> {
-        return rootPackage
+    async findPackageGraphById(packageId: PackageId): Promise<PackageGraph | null> {
+        const pkg = await this.findPackageById(packageId)
+
+        if (pkg == null) {
+            return null
+        }
+
+        const parentPackages = await this.findParentPackages(packageId)
+        const subPackages = await this.findSubPackages(packageId)
+
+        return {
+            ...pkg,
+            parentPackages,
+            subPackages
+        }
     }
 
-    async updatePackage(packageJson: PackageUpdate): Promise<Package> {
-        const pkg = await this.findPackageById(packageJson.id)
+    async findParentPackages(childPackageId: PackageId): Promise<Package[]> {
+        if (childPackageId === rootPackageId) {
+            return []
+        }
+
+        const parentPackageId = this.#parentPackagesByChildId.get(childPackageId)
+        checkNonNull(parentPackageId, () => `Package not found: '${childPackageId}.`)
+        const parentPkgAttributes = this.#packagesById.get(parentPackageId)
+        checkNonNull(parentPkgAttributes, () => `Parent package not found '${parentPackageId}.`)
+        return [
+            parentPkgAttributes,
+            ...(await this.findParentPackages(parentPackageId))
+        ]
+    }
+
+    async findRootPackageGraph(): Promise<PackageGraph> {
+        return (await this.findPackageGraphById(rootPackageId))!
+    }
+
+    async findSubPackages(parentPackageId: PackageId): Promise<Package[]> {
+        const childPkgIds = this.#subPackagesByParentId.get(parentPackageId)
+        checkNonNull(childPkgIds, () => `Package not found: '${parentPackageId}.`)
+        const result: Package[] = []
+        for (let pkgId of childPkgIds) {
+            result.push((await this.findPackageById(pkgId))!)
+        }
+        result.sort((p1, p2) => p1.name.localeCompare(p2.name) || p1.id.localeCompare(p2.id))
+        return result
+    }
+
+    async updatePackage(cmd: PackageUpdateCmd): Promise<void> {
+        const packageUpdate = cmd.payload
+        const pkg = await this.findPackageById(packageUpdate.id)
 
         if (pkg == null) {
             throw new HTTPException(404)
@@ -70,13 +130,11 @@ export class PackageMockService implements IPackageQueryService, IPackageCommand
 
         const revisedPkg: Package = {
             ...pkg,
-            name: packageJson.name ?? pkg.name,
-            summary: packageJson.summary ?? pkg.summary,
-            description: packageJson.description ?? pkg.summary,
+            name: packageUpdate.name ?? pkg.name,
+            summary: packageUpdate.summary ?? pkg.summary,
+            description: packageUpdate.description ?? pkg.description,
         }
 
-        packagesById.set(revisedPkg.id, revisedPkg)
-
-        return revisedPkg
+        this.#packagesById.set(revisedPkg.id, revisedPkg)
     }
 }

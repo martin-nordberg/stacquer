@@ -2,6 +2,7 @@ import {genPackageId, type Package} from "$shared/domain/structure/Package.ts";
 import {useNavigate} from "@solidjs/router";
 import {TbFolderPlus} from 'solid-icons/tb'
 import {packageClientService} from "../../clients/structure/PackageClient.ts";
+import {buildPackageCreateCmd} from "$shared/commandservices/structure/PackageCmdSvcs.ts";
 
 type PackageAddLinkProps = {
     parentPkg: Package
@@ -15,14 +16,11 @@ const PackageAddLink = (props: PackageAddLinkProps) => {
 
         const id = genPackageId()
 
-        await packageClientService.createPackage({
+        await packageClientService.createPackage(buildPackageCreateCmd({
             id,
             name: "newpackage",
-            parentPackage: {
-                id: props.parentPkg.id,
-                name: props.parentPkg.name,
-            }
-        })
+            parentPackageId: props.parentPkg.id,
+        }, "origin_todo"))
 
         // Then navigate to the desired path
         navigate(`/projects/${id}`);

@@ -5,7 +5,7 @@ import PackageAddLink from "../../../fragments/links/PackageAddLink.tsx";
 
 const RootPackageBrowseView = () => {
 
-    const [pkg] = createResource(() => packageClientService.findRootPackage());
+    const [pkg] = createResource(() => packageClientService.findRootPackageGraph());
 
     return (
         <>
@@ -19,9 +19,9 @@ const RootPackageBrowseView = () => {
                     </Show>
                     <Show when={pkg()!.subPackages.length > 0}>
                         <For each={pkg()!.subPackages}>
-                            {(subpkg, _) => (
+                            {(subPkg, _) => (
                                 <li>
-                                    <PackageLink pkg={subpkg} withSummary></PackageLink>
+                                    <PackageLink pkg={subPkg} withSummary></PackageLink>
                                 </li>
                             )}
                         </For>

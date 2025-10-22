@@ -1,6 +1,7 @@
 import {describe, expect, it} from 'bun:test'
 import app from '../../../src'
 import {genPackageId, packageUpdateSchema, rootPackageId} from "$shared/domain/structure/Package";
+import {genCommandId} from "$shared/commandservices/CommandId";
 
 describe('Package operations', () => {
     it('Should return the root package', async () => {
@@ -14,38 +15,45 @@ describe('Package operations', () => {
 
     it('Should create and then find and update a package', async () => {
         const id = genPackageId()
-        const pkg = {
+        const pkg0 = {
             id: id,
             name: "Sample",
             summary: "An example package",
-            parentPackage: {
-                id: rootPackageId,
-                name: "$"
-            }
         }
 
-        const req = new Request('http://localhost/commands/packages', {
+        const cmdId = genCommandId()
+        const req = new Request('http://localhost/commands', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(pkg),
-        });
+            body: JSON.stringify({
+                cmdType: 'structure/package/create',
+                cmdId,
+                origin: 'testing',
+                createdAt: new Date().toISOString(),
+                payload: {...pkg0, parentPackageId: rootPackageId}
+            }),
+        })
 
-        const res = await app.fetch(req);
+        const res = await app.fetch(req)
 
-        expect(res.status).toBe(201);
-        expect(await res.json()).toEqual({
-            ...pkg,
-            subPackages: []
-        });
+        expect(res.status).toBe(201)
 
-        const req2 = new Request(`http://localhost/queries/packages/${id}`)
+        const req2 = new Request(`http://localhost/queries/packages/${id}/graph`)
         const res2 = await app.fetch(req2)
         expect(res2.status).toBe(200)
         expect(await res2.json()).toEqual({
-            ...pkg,
-            subPackages: []
+            ...pkg0,
+            parentPackages: [
+                {
+                    description: "This is the predefined topmost package.",
+                    id: "pckgthestacquerrootpackageid",
+                    name: "$",
+                    summary: "The root package.",
+                }
+            ],
+            subPackages: [],
         })
 
         const req3 = new Request('http://localhost/queries/packages')
@@ -54,28 +62,45 @@ describe('Package operations', () => {
         const rootPackage: any = await res3.json()
         expect(rootPackage.id).toBe(rootPackageId)
         expect(rootPackage.name).toBe("$")
-        expect(rootPackage.subPackages.length).toBe(1)
-        expect(rootPackage.subPackages[0].id).toBe(id)
-        expect(rootPackage.subPackages[0].name).toBe("Sample")
-        expect(rootPackage.subPackages[0].summary).toBe("An example package")
 
         const pkg4 = {
             id: id,
             name: "Zample"
         }
         expect(() => packageUpdateSchema.parse(pkg4)).not.toThrow()
-        const req4 = new Request('http://localhost/commands/packages', {
-            method: 'PATCH',
+        const req4 = new Request('http://localhost/commands', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(pkg4),
+            body: JSON.stringify({
+                cmdType: 'structure/package/update',
+                cmdId,
+                origin: 'testing',
+                createdAt: new Date().toISOString(),
+                payload: pkg4
+            }),
         });
         const res4 = await app.fetch(req4)
-        expect(res4.status).toBe(200)
-        const package4: any = await res4.json()
-        expect(package4.id).toBe(id)
-        expect(package4.name).toBe("Zample")
+        expect(res4.status).toBe(201)
+
+        const req5 = new Request(`http://localhost/queries/packages/${id}/graph`)
+        const res5 = await app.fetch(req5)
+        expect(res5.status).toBe(200)
+        expect(await res5.json()).toEqual({
+            ...pkg0,
+            ...pkg4,
+            parentPackages: [
+                {
+                    description: "This is the predefined topmost package.",
+                    id: "pckgthestacquerrootpackageid",
+                    name: "$",
+                    summary: "The root package.",
+                }
+            ],
+            subPackages: [],
+        })
+
     })
 
     it('Should fail to create an unnamed package', async () => {
@@ -83,18 +108,21 @@ describe('Package operations', () => {
         const pkg = {
             id: id,
             summary: "An example package",
-            parentPackage: {
-                id: rootPackageId,
-                name: "$"
-            }
+            parentPackageId: rootPackageId,
         }
 
-        const req = new Request('http://localhost/commands/packages', {
+        const req = new Request('http://localhost/commands', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(pkg),
+            body: JSON.stringify({
+                cmdType: 'structure/package/create',
+                cmdId: genCommandId(),
+                origin: 'testing',
+                createdAt: new Date().toISOString(),
+                payload: pkg
+            }),
         })
 
         const res = await app.fetch(req)
@@ -103,7 +131,7 @@ describe('Package operations', () => {
         expect(await res.json()).toEqual([{
             expected: "string",
             code: "invalid_type",
-            path: ["name"],
+            path: ["payload", "name"],
             message: "Invalid input: expected string, received undefined"
         }])
     })
