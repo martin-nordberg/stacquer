@@ -5,23 +5,16 @@ import App from './App.tsx'
 import {lazy} from "solid-js";
 
 import "./index.css"
-import PackagePage from "./pages/structure/PackagePage.tsx";
 
-const HomePage = lazy(() => import("./pages/home/./HomePage"));
+const RootPackagePage = lazy(() => import("./pages/structure/RootPackagePage"));
+const PackagePage = lazy(() => import("./pages/structure/PackagePage"));
 
 const root = document.getElementById('root')
 
 render(() => (
     <Router root={App}>
-        <Route path="/" component={HomePage}/>
+        <Route path="/" component={RootPackagePage}/>
         <Route path="/packages/:id" component={PackagePage}/>
     </Router>
 ), root!)
-
-
-// <Route path="/organizations">
-//     <Route path="/" component={OrganizationList} />
-//     <Route path="/:orgId" component={Organization} />
-// </Route>
-
 

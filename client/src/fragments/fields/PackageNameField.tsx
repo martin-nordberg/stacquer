@@ -16,9 +16,7 @@ const PackageNameField = (props: PackageNameFieldProps) => {
     }
 
     return (
-        <>
-            <input type="text" value={props.pkg.name} on:blur={changePackageName}/>
-        </>
+        <input id={props.pkg.id+"Name"} class="font-bold italic" type="text" value={props.pkg.name} on:blur={changePackageName}/>
     )
 }
 

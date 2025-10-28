@@ -1,8 +1,8 @@
 import {Hono} from 'hono'
 import {cors} from 'hono/cors'
 import {packageQryRoutes} from "$shared/routes/structure/PackageQryRoutes";
-import {PackageMockService} from "./mockservices/structure/PackageMockService";
 import {commandRoutes} from "$shared/routes/commands/CommandRoutes";
+import {PackageSqlService} from "./sqlservices/structure/PackageSqlService";
 
 const app = new Hono()
 
@@ -10,7 +10,7 @@ app.use('*', cors({
     origin: ['http://localhost:3000', 'http://10.0.0.3:3000']
 }));
 
-const packageService = new PackageMockService();
+const packageService = new PackageSqlService();
 
 const routes =
     app.route('/commands', commandRoutes(packageService))

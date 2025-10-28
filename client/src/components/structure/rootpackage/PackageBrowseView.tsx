@@ -1,30 +1,31 @@
-import {For, Show} from "solid-js";
-import PackageLink from "../../../fragments/links/PackageLink.tsx";
-import PackageAddLink from "../../../fragments/links/PackageAddLink.tsx";
 import {type PackageGraph} from "$shared/domain/structure/Package.ts";
+import PackageSummaryField from "../../../fragments/fields/PackageSummaryField.tsx";
+import FormLabel from "../../../fragments/labels/FormLabel.tsx";
+import SubPackagesList from "../../../fragments/fields/SubPackagesList.tsx";
+import PackageDescriptionField from "../../../fragments/fields/PackageDescriptionField.tsx";
 
 type PackageBrowseViewProps = {
     pkg: PackageGraph,
 }
 
 const PackageBrowseView = (props: PackageBrowseViewProps) => {
+    const summaryInputId = props.pkg.id + "Summary"
+    const descriptionInputId = props.pkg.id + "Description"
+
     return (
         <>
-            <ul>
-                <Show when={props.pkg.subPackages.length == 0}>
-                    <li>(No sub packages)</li>
-                </Show>
-                <Show when={props.pkg.subPackages.length > 0}>
-                    <For each={props.pkg.subPackages}>
-                        {(subPkg, _) => (
-                            <li>
-                                <PackageLink pkg={subPkg} withSummary></PackageLink>
-                            </li>
-                        )}
-                    </For>
-                </Show>
-                <li><PackageAddLink parentPkg={props.pkg}/></li>
-            </ul>
+            <FormLabel inputId={summaryInputId}>Summary:</FormLabel>
+            <div class="ml-2">
+                <PackageSummaryField inputId={summaryInputId} pkg={props.pkg}/>
+            </div>
+            <FormLabel inputId={descriptionInputId}>Description:</FormLabel>
+            <div class="ml-2">
+                <PackageDescriptionField inputId={descriptionInputId} pkg={props.pkg}/>
+            </div>
+            <FormLabel>Subpackages:</FormLabel>
+            <div class="ml-2">
+                <SubPackagesList pkg={props.pkg}/>
+            </div>
         </>
     )
 }

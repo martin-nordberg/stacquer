@@ -23,14 +23,14 @@ const PackageAddLink = (props: PackageAddLinkProps) => {
         }, "origin_todo"))
 
         // Then navigate to the desired path
-        navigate(`/projects/${id}`);
+        navigate(`/packages/${id}`);
     }
 
     return (
         <>
-            <button class="hover:underline flex items-center gap-1.5" onClick={createAndOpenPackage}>
+            <button class="hover:underline cursor-pointer flex items-center gap-1.5" onClick={createAndOpenPackage}>
                 <span class="inline-block"><TbFolderPlus size="22" color="#D9B99B"/></span>
-                <span>[Add a package ...]</span>
+                <span>[Add a subpackage ...]</span>
             </button>
         </>
     )

@@ -1,27 +1,25 @@
-import {type Package} from "$shared/domain/structure/Package.ts";
 import {A} from "@solidjs/router";
 import {Show} from "solid-js";
 import {TbFolder} from 'solid-icons/tb'
 
-type PackageLinkProps = {
+type RootPackageLinkProps = {
     inline?: boolean | undefined,
-    pkg: Package,
     withFolder?: boolean | undefined,
 }
 
-const PackageLink = (props: PackageLinkProps) => {
+const RootPackageLink = (props: RootPackageLinkProps) => {
 
     return (
-        <A class="hover:underline flex items-center gap-1.5" classList={{inline: props.inline}}
-           href={"/packages/" + props.pkg.id}>
+        <A class="hover:underline flex items-center gap-1.5 text-green-700" classList={{inline: props.inline}}
+           href={"/"}>
             <Show when={props.withFolder}>
                     <span class="inline-block">
                         <TbFolder size="22" color="#D9B99B"/>
                     </span>
             </Show>
-            <span class="font-bold">{props.pkg.name}</span>
+            <span class="font-bold">Stacquer</span>
         </A>
     )
 }
 
-export default PackageLink
+export default RootPackageLink

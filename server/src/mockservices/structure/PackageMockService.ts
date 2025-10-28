@@ -100,8 +100,8 @@ export class PackageMockService implements IPackageQrySvc, IPackageCmdSvc {
         const parentPkgAttributes = this.#packagesById.get(parentPackageId)
         checkNonNull(parentPkgAttributes, () => `Parent package not found '${parentPackageId}.`)
         return [
-            parentPkgAttributes,
-            ...(await this.findParentPackages(parentPackageId))
+            ...(await this.findParentPackages(parentPackageId)),
+            parentPkgAttributes
         ]
     }
 

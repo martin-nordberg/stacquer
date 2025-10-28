@@ -1,7 +1,6 @@
-import {createResource, For, Show} from "solid-js";
+import {createResource, Show} from "solid-js";
 import {packageClientService} from "../../../clients/structure/PackageClient.ts";
-import PackageLink from "../../../fragments/links/PackageLink.tsx";
-import PackageAddLink from "../../../fragments/links/PackageAddLink.tsx";
+import SubPackagesList from "../../../fragments/fields/SubPackagesList.tsx";
 
 const RootPackageBrowseView = () => {
 
@@ -13,24 +12,12 @@ const RootPackageBrowseView = () => {
                 <p>Loading ...</p>
             </Show>
             <Show when={pkg()}>
-                <ul>
-                    <Show when={pkg()!.subPackages.length == 0}>
-                        <li>(No top level packages)</li>
-                    </Show>
-                    <Show when={pkg()!.subPackages.length > 0}>
-                        <For each={pkg()!.subPackages}>
-                            {(subPkg, _) => (
-                                <li>
-                                    <PackageLink pkg={subPkg} withSummary></PackageLink>
-                                </li>
-                            )}
-                        </For>
-                    </Show>
-                    <li><PackageAddLink parentPkg={pkg()!}/></li>
-                </ul>
+                <div class="ml-2">
+                    <SubPackagesList pkg={pkg()!}/>
+                </div>
             </Show>
         </>
-    )
+)
 }
 
 export default RootPackageBrowseView
