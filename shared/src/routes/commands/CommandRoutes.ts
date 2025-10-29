@@ -3,7 +3,8 @@ import {zxValidator} from "../validation/zxvalidator";
 import {type Command, commandSchema, dispatchCmd, type ICommandSvc} from "../../commandservices/CommandSvcs";
 
 export const commandRoutes = (
-    commandService: ICommandSvc
+    commandService: ICommandSvc,
+    chain: (cmd: Command) => void
 ) => {
 
     return new Hono()
@@ -12,7 +13,7 @@ export const commandRoutes = (
             zxValidator('json', commandSchema),
             async (c) => {
                 const command: Command = c.req.valid('json')
-                await dispatchCmd(command, commandService)
+                await dispatchCmd(command, commandService, chain)
                 return c.body(null, 201)
             }
         )

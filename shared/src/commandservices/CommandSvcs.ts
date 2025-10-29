@@ -15,7 +15,10 @@ export const commandSchema = z.discriminatedUnion('cmdType', [
 export type Command = z.infer<typeof commandSchema>
 
 
-export const dispatchCmd = (command: Command, service: ICommandSvc) => {
+export const dispatchCmd =
+    (command: Command, service: ICommandSvc, chain: (cmd: Command) => void) => {
+    chain(command)
+
     if (command.cmdType.startsWith('structure/')) {
         return dispatchStructureCmd(command as StructureCmd, service)
     } else {

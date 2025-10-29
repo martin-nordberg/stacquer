@@ -3,6 +3,8 @@ import {cors} from 'hono/cors'
 import {packageQryRoutes} from "$shared/routes/structure/PackageQryRoutes";
 import {commandRoutes} from "$shared/routes/commands/CommandRoutes";
 import {PackageSqlService} from "./sqlservices/structure/PackageSqlService";
+import {writeCommandToYaml} from "./yamlservices/YamlCommandWriter";
+import {readYamlToCommands} from "./yamlservices/YamlCommandReader";
 
 const app = new Hono()
 
@@ -11,9 +13,10 @@ app.use('*', cors({
 }));
 
 const packageService = new PackageSqlService();
+await readYamlToCommands(packageService, (_) => {})
 
 const routes =
-    app.route('/commands', commandRoutes(packageService))
+    app.route('/commands', commandRoutes(packageService, writeCommandToYaml))
         .route('/queries/packages', packageQryRoutes(packageService))
 
         .get('/', (c) => {

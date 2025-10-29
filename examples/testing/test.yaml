@@ -1,0 +1,139 @@
+cmdType: structure/package/create
+cmdId: cmndd5ndsj9fscw3m03ctg1r14pe
+createdAt: 2025-10-29T23:16:14.843Z
+origin: origin_todo
+payload: 
+  id: pckgso7areibpx2k1y7jadp6aqdz
+  name: newpackage
+  parentPackageId: pckgthestacquerrootpackageid
+---
+cmdType: structure/package/update
+cmdId: cmndza58t9k4sz9ojq5gnnm5lf8q
+createdAt: 2025-10-29T23:16:27.752Z
+origin: origin_todo
+payload: 
+  id: pckgso7areibpx2k1y7jadp6aqdz
+  name: mypackage
+---
+cmdType: structure/package/update
+cmdId: cmndtsu5igd7jl7brrsiu55f6ohq
+createdAt: 2025-10-29T23:16:31.025Z
+origin: origin_todo
+payload: 
+  id: pckgso7areibpx2k1y7jadp6aqdz
+  summary: Mine
+---
+cmdType: structure/package/update
+cmdId: cmndfp0t5w7wu1bruntb2azn4pj9
+createdAt: 2025-10-29T23:16:35.018Z
+origin: origin_todo
+payload: 
+  id: pckgso7areibpx2k1y7jadp6aqdz
+  description: All mine!
+---
+cmdType: structure/package/create
+cmdId: cmndwkgorohhq5uagq6ltvkdga6r
+createdAt: 2025-10-29T23:16:37.409Z
+origin: origin_todo
+payload: 
+  id: pckge6cgdwlbx3sf5kj8wpuk1xsh
+  name: newpackage
+  parentPackageId: pckgthestacquerrootpackageid
+---
+cmdType: structure/package/update
+cmdId: cmnduk5w34tl5ecsgs7s59te6hjf
+createdAt: 2025-10-29T23:16:44.222Z
+origin: origin_todo
+payload: 
+  id: pckge6cgdwlbx3sf5kj8wpuk1xsh
+  name: yourpackage
+---
+cmdType: structure/package/update
+cmdId: cmndymjatet0r4dfe96mfrx7np2s
+createdAt: 2025-10-29T23:16:48.065Z
+origin: origin_todo
+payload: 
+  id: pckge6cgdwlbx3sf5kj8wpuk1xsh
+  summary: Yours
+---
+cmdType: structure/package/update
+cmdId: cmndzhk49k3t52pjhalh2oxrpts0
+createdAt: 2025-10-29T23:16:53.719Z
+origin: origin_todo
+payload: 
+  id: pckge6cgdwlbx3sf5kj8wpuk1xsh
+  description: All yours
+---
+cmdType: structure/package/update
+cmdId: cmndg3yw7x3zc9mqyn89igvh79yx
+createdAt: 2025-10-29T23:17:52.952Z
+origin: origin_todo
+payload: 
+  id: pckge6cgdwlbx3sf5kj8wpuk1xsh
+  description: All yourz
+---
+cmdType: structure/package/update
+cmdId: cmndwpxr0pcxmmxkyl9c3eoeikzf
+createdAt: 2025-10-29T23:18:02.898Z
+origin: origin_todo
+payload: 
+  id: pckge6cgdwlbx3sf5kj8wpuk1xsh
+  summary: Yourz
+---
+cmdType: structure/package/update
+cmdId: cmndkico17e5rexysqikyj6w8wpn
+createdAt: 2025-10-29T23:18:39.632Z
+origin: origin_todo
+payload: 
+  id: pckge6cgdwlbx3sf5kj8wpuk1xsh
+  summary: Yourz
+---
+cmdType: structure/package/update
+cmdId: cmndwpu7gvozq9m21vk69aboqsao
+createdAt: 2025-10-29T23:18:45.521Z
+origin: origin_todo
+payload: 
+  id: pckge6cgdwlbx3sf5kj8wpuk1xsh
+  summary: Yours
+---
+cmdType: structure/package/create
+cmdId: cmndk9f516m68uvbdt56lzcw8yjl
+createdAt: 2025-10-29T23:27:12.281Z
+origin: origin_todo
+payload: 
+  id: pckgmxcw4pbgjm5na37ua27u8kgn
+  name: newpackage
+  parentPackageId: pckge6cgdwlbx3sf5kj8wpuk1xsh
+---
+cmdType: structure/package/update
+cmdId: cmndcjvs11roujy6r48lllm3o91m
+createdAt: 2025-10-29T23:27:26.679Z
+origin: origin_todo
+payload: 
+  id: pckgmxcw4pbgjm5na37ua27u8kgn
+  summary: Your little package
+---
+cmdType: structure/package/update
+cmdId: cmndlauxxuqhx4sn6axvot2g4cu8
+createdAt: 2025-10-29T23:27:33.908Z
+origin: origin_todo
+payload: 
+  id: pckgmxcw4pbgjm5na37ua27u8kgn
+  name: littleone
+---
+cmdType: structure/package/update
+cmdId: cmndehe1bxw99omxylmenfu96wb7
+createdAt: 2025-10-29T23:27:43.163Z
+origin: origin_todo
+payload: 
+  id: pckge6cgdwlbx3sf5kj8wpuk1xsh
+  summary: Yourz
+---
+cmdType: structure/package/update
+cmdId: cmndtx3f696pkoeuvrvd2ad16sqd
+createdAt: 2025-10-29T23:27:51.407Z
+origin: origin_todo
+payload: 
+  id: pckgmxcw4pbgjm5na37ua27u8kgn
+  summary: Your leettle package
+---

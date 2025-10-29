@@ -1,6 +1,8 @@
 import type {Package} from "$shared/domain/structure/Package.ts";
 import {packageClientService} from "../../clients/structure/PackageClient.ts";
 import {buildPackageUpdateCmd} from "$shared/commandservices/structure/PackageCmdSvcs.ts";
+import {descriptionSchema} from "$shared/domain/core/Description.ts";
+import {createEffect, createSignal} from "solid-js";
 
 type PackageDescriptionFieldProps = {
     inputId: string,
@@ -9,15 +11,24 @@ type PackageDescriptionFieldProps = {
 
 const PackageDescriptionField = (props: PackageDescriptionFieldProps) => {
 
+    const [getDescription, setDescription] = createSignal(props.pkg.description)
+    createEffect(() => setDescription(props.pkg.description))
+
     const changePackageDescription = (event: FocusEvent) => {
-        packageClientService.updatePackage(buildPackageUpdateCmd({
-            id: props.pkg.id,
-            description: (event.target as HTMLInputElement).value,
-        }, "origin_todo"))
+        const description = (event.target as HTMLInputElement).value
+
+        if (description != getDescription() && (description || getDescription())) {
+            setDescription(descriptionSchema.parse(description))
+            packageClientService.updatePackage(buildPackageUpdateCmd({
+                id: props.pkg.id,
+                description: getDescription(),
+            }, "origin_todo"))
+        }
     }
 
     return (
-        <textarea id={props.inputId} class="italic" placeholder="(Enter a description ...)" value={props.pkg.description??""} on:blur={changePackageDescription}/>
+        <textarea id={props.inputId} class="italic" placeholder="(Enter a description ...)"
+                  value={getDescription() ?? ""} on:blur={changePackageDescription}/>
     )
 }
 
