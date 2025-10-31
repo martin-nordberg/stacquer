@@ -1,7 +1,7 @@
 import {z} from "zod";
 import {packageIdSchema} from "./Package";
 
-/** Schema for a package / subpackage realtion. */
+/** Schema for a package / subpackage relation. */
 export const subPackageRelationSchema =
     z.strictObject({
         /** The unique ID of the linked package. */

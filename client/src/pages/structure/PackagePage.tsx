@@ -1,13 +1,10 @@
 import PageTitle from "../../fragments/PageTitle.tsx";
 import PackageBrowseView from "../../components/structure/rootpackage/PackageBrowseView.tsx";
 import {useParams} from "@solidjs/router";
-import {packageIdSchema, rootPackageId} from "$shared/domain/structure/Package.ts";
-import {createEffect, createResource, createSignal, For, Show} from "solid-js";
+import {packageIdSchema} from "$shared/domain/structure/Package.ts";
+import {createEffect, createResource, createSignal, Show} from "solid-js";
 import {packageClientService} from "../../clients/structure/PackageClient.ts";
-import PackageNameField from "../../fragments/fields/PackageNameField.tsx";
-import PackageLink from "../../fragments/links/PackageLink.tsx";
-import {TbFolder} from "solid-icons/tb";
-import RootPackageLink from "../../fragments/links/RootPackageLink.tsx";
+import PackagePageTitle from "../../fragments/titles/PackagePageTitle.tsx";
 
 const PackagePage = () => {
 
@@ -25,29 +22,19 @@ const PackagePage = () => {
 
     return (
         <Show when={pkg()} fallback={<PageTitle>Loading ...</PageTitle>}>
-            <PageTitle>
-                <div class="inline">
-                    <For each={pkg()!.parentPackages}>{(subpkg) =>
-                        <>
-                            <Show when={subpkg.id != rootPackageId} fallback={
-                                <>
-                                    <RootPackageLink inline/>
-                                    <span class="mr-1.5 text-green-700">:</span>
-                                </>
-                            }>
-                                <PackageLink inline pkg={subpkg}/>
-                                <span class="ml-1.5 mr-1.5">.</span>
-                            </Show>
-                            <TbFolder class="inline-block mr-1" size="24" color="#D9B99B"></TbFolder>
-                        </>
-                    }
-                    </For>
-                    <PackageNameField pkg={pkg()!}></PackageNameField>
+            <div class="flex flex-col min-h-screen">
+                <PackagePageTitle pkg={pkg()!}/>
+
+                <div class="flex flex-col md:flex-row flex-1">
+                    <div class="flex-5 bg-orange-50 border border-blue-900 p-1.5">
+                        <PackageBrowseView pkg={pkg()!}></PackageBrowseView>
+                    </div>
+
+                    <div class="flex-6 bg-gray-50 border border-blue-900 p-1.5">Right Panel</div>
                 </div>
-            </PageTitle>
-            <PackageBrowseView pkg={pkg()!}></PackageBrowseView>
+            </div>
         </Show>
-    )
+)
 }
 
 export default PackagePage

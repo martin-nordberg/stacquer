@@ -13,7 +13,6 @@ const PackageAddLink = (props: PackageAddLinkProps) => {
     const navigate = useNavigate()
 
     const createAndOpenPackage = async () => {
-
         const id = genPackageId()
 
         await packageClientService.createPackage(buildPackageCreateCmd({

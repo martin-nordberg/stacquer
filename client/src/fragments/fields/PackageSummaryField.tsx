@@ -27,7 +27,7 @@ const PackageSummaryField = (props: PackageSummaryFieldProps) => {
     }
 
     return (
-        <input id={props.inputId} class="italic" placeholder="(Enter a summary ...)" type="text"
+        <input id={props.inputId} class="italic w-full" placeholder="(Enter a summary ...)" type="text"
                maxlength={summaryMaxLength}
                value={getSummary() ?? ""} on:blur={changePackageSummary}/>
     )

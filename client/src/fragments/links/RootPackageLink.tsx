@@ -10,7 +10,7 @@ type RootPackageLinkProps = {
 const RootPackageLink = (props: RootPackageLinkProps) => {
 
     return (
-        <A class="hover:underline flex items-center gap-1.5 text-green-700" classList={{inline: props.inline}}
+        <A class="hover:underline flex items-center gap-1.5 text-blue-900" classList={{inline: props.inline}}
            href={"/"}>
             <Show when={props.withFolder}>
                     <span class="inline-block">

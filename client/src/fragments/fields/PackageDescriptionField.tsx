@@ -27,7 +27,7 @@ const PackageDescriptionField = (props: PackageDescriptionFieldProps) => {
     }
 
     return (
-        <textarea id={props.inputId} class="italic" placeholder="(Enter a description ...)"
+        <textarea id={props.inputId} class="italic w-full" placeholder="(Enter a description ...)"
                   value={getDescription() ?? ""} on:blur={changePackageDescription}/>
     )
 }

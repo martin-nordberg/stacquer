@@ -7,7 +7,7 @@ interface PageTitleProps {
 
 const PageTitle = (props: PageTitleProps) => {
     return (
-        <h1 class="text-2xl mt-1">{props.children}</h1>
+        <h1 class="text-2xl p-1 bg-blue-100 border-b border-t-2 border-blue-900">{props.children}</h1>
     )
 }
 
