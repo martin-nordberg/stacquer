@@ -18,9 +18,13 @@ import {
 
 export class PackageMockService implements IPackageQrySvc, IPackageCmdSvc {
 
+    readonly #dependentPackagesByPrecedentId = new Map<PackageId, PackageId[]>()
+
     readonly #packagesById = new Map<PackageId, Package>()
 
     readonly #parentPackagesByChildId = new Map<PackageId, PackageId>()
+
+    readonly #precedentPackagesByDependentId = new Map<PackageId, PackageId[]>()
 
     readonly #rootPackage: Package = packageSchema.parse({
         id: rootPackageId,
@@ -69,6 +73,17 @@ export class PackageMockService implements IPackageQrySvc, IPackageCmdSvc {
         this.#subPackagesByParentId.delete(packageId)
     }
 
+    async findDependentPackages(precedentPkgId: PackageId): Promise<Package[]> {
+        const dependentPkgIds = this.#dependentPackagesByPrecedentId.get(precedentPkgId)
+        checkNonNull(dependentPkgIds, () => `Package not found: '${precedentPkgId}.`)
+        const result: Package[] = []
+        for (let pkgId of dependentPkgIds) {
+            result.push((await this.findPackageById(pkgId))!)
+        }
+        result.sort((p1, p2) => p1.name.localeCompare(p2.name) || p1.id.localeCompare(p2.id))
+        return result
+    }
+
     async findPackageById(packageId: PackageId): Promise<Package | null> {
         return this.#packagesById.get(packageId) ?? null
     }
@@ -83,10 +98,15 @@ export class PackageMockService implements IPackageQrySvc, IPackageCmdSvc {
         const parentPackages = await this.findParentPackages(packageId)
         const subPackages = await this.findSubPackages(packageId)
 
+        const dependentPackages = await this.findDependentPackages(packageId)
+        const precedentPackages = await this.findPrecedentPackages(packageId)
+
         return {
             ...pkg,
             parentPackages,
-            subPackages
+            subPackages,
+            dependentPackages,
+            precedentPackages
         }
     }
 
@@ -103,6 +123,17 @@ export class PackageMockService implements IPackageQrySvc, IPackageCmdSvc {
             ...(await this.findParentPackages(parentPackageId)),
             parentPkgAttributes
         ]
+    }
+
+    async findPrecedentPackages(dependentPkgId: PackageId): Promise<Package[]> {
+        const precedentPkgIds = this.#precedentPackagesByDependentId.get(dependentPkgId)
+        checkNonNull(precedentPkgIds, () => `Package not found: '${dependentPkgId}.`)
+        const result: Package[] = []
+        for (let pkgId of precedentPkgIds) {
+            result.push((await this.findPackageById(pkgId))!)
+        }
+        result.sort((p1, p2) => p1.name.localeCompare(p2.name) || p1.id.localeCompare(p2.id))
+        return result
     }
 
     async findRootPackageGraph(): Promise<PackageGraph> {

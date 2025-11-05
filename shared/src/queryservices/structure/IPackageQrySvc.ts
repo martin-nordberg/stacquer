@@ -7,6 +7,9 @@ import {
 
 export interface IPackageQrySvc {
 
+    /** Finds the dependents of a given package. */
+    findDependentPackages(precedentPkgId: PackageId): Promise<Package[]>
+
     /** Finds the package with given unique ID */
     findPackageById(packageId: PackageId): Promise<Package | null>
 
@@ -15,6 +18,9 @@ export interface IPackageQrySvc {
 
     /** Finds the sequence of parents of a given package, empty for the root package. */
     findParentPackages(childPackageId: PackageId): Promise<Package[]>
+
+    /** Finds the precedents of a given package. */
+    findPrecedentPackages(dependentPkgId: PackageId): Promise<Package[]>
 
     /** Finds the top level root package. */
     findRootPackageGraph(): Promise<PackageGraph>

@@ -55,6 +55,17 @@ export class StacquerSqlDb {
         query.run()
 
         query = this.db.query(
+            `CREATE TABLE PackageDependency
+             (
+                 dependentPackageId TEXT(28) NOT NULL,
+                 precedentPackageId TEXT(28) NOT NULL,
+                 CONSTRAINT PackageDependency_DependentPackage_FK FOREIGN KEY (dependentPackageId) REFERENCES Package (id) ON DELETE CASCADE,
+                 CONSTRAINT PackageDependency_PrecedentPackage_FK FOREIGN KEY (precedentPackageId) REFERENCES Package (id) ON DELETE CASCADE
+             );`
+        )
+        query.run()
+
+        query = this.db.query(
             `INSERT INTO Package (id, name, summary, description)
              VALUES ($id, $name, $summary, $description);`)
         query.run({

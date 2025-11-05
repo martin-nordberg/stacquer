@@ -74,8 +74,10 @@ export const packageGraphSchema =
         ...packageAttributesSchema.shape,
 
         parentPackages: packageSchema.array(),
+        subPackages: packageSchema.array(),
 
-        subPackages: packageSchema.array()
+        dependentPackages: packageSchema.array(),
+        precedentPackages: packageSchema.array(),
     }).readonly()
 
 export type PackageGraph = z.infer<typeof packageGraphSchema>

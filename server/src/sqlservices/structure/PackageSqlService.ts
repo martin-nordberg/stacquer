@@ -13,7 +13,7 @@ import {
 } from "$shared/domain/structure/Package";
 import {type IPackageQrySvc} from "$shared/queryservices/structure/IPackageQrySvc";
 import {StacquerSqlDb} from "../StacquerSqlDb";
-import {dropNulls} from "$shared/util/dropNulls";
+import {dropNullFields} from "$shared/util/dropNullFields";
 
 
 export class PackageSqlService implements IPackageQrySvc, IPackageCmdSvc {
@@ -57,6 +57,25 @@ export class PackageSqlService implements IPackageQrySvc, IPackageCmdSvc {
         )
     }
 
+    async findDependentPackages(precedentPkgId: PackageId): Promise<Package[]> {
+        const recs = this.db.all(
+            'package.findDependentPackages',
+            () =>
+                `SELECT id, name, summary, description
+         FROM Package
+                  JOIN PackageDependency ON Package.id = PackageDependency.dependentPackageId
+         WHERE precedentPackageId = $id
+         ORDER BY name, id`,
+            {$id: precedentPkgId}
+        )
+
+        const result: Package[] = []
+        for (let rec of recs) {
+            result.push(packageSchema.parse(dropNullFields(rec)))
+        }
+        return result
+    }
+
     async findPackageById(packageId: PackageId): Promise<Package | null> {
         const rec = this.db.get(
             'package.findById',
@@ -66,7 +85,7 @@ export class PackageSqlService implements IPackageQrySvc, IPackageCmdSvc {
                  WHERE id = $id`,
             {$id: packageId}
         )
-        return packageSchema.parse(dropNulls(rec))
+        return packageSchema.parse(dropNullFields(rec))
     }
 
     async findPackageGraphById(packageId: PackageId): Promise<PackageGraph | null> {
@@ -79,10 +98,15 @@ export class PackageSqlService implements IPackageQrySvc, IPackageCmdSvc {
         const parentPackages = await this.findParentPackages(packageId)
         const subPackages = await this.findSubPackages(packageId)
 
+        const dependentPackages = await this.findDependentPackages(packageId)
+        const precedentPackages = await this.findPrecedentPackages(packageId)
+
         return {
             ...pkg,
             parentPackages,
-            subPackages
+            subPackages,
+            dependentPackages,
+            precedentPackages
         }
     }
 
@@ -101,12 +125,31 @@ export class PackageSqlService implements IPackageQrySvc, IPackageCmdSvc {
             {$id: childPackageId}
         )
 
-        const parentPkg = packageSchema.parse(dropNulls(rec))
+        const parentPkg = packageSchema.parse(dropNullFields(rec))
 
         return [
             ...(await this.findParentPackages(parentPkg.id)),
             parentPkg
         ]
+    }
+
+    async findPrecedentPackages(dependentPkgId: PackageId): Promise<Package[]> {
+        const recs = this.db.all(
+            'package.findPrecedentPackages',
+            () =>
+                `SELECT id, name, summary, description
+         FROM Package
+                  JOIN PackageDependency ON Package.id = PackageDependency.precedentPackageId
+         WHERE dependentPackageId = $id
+         ORDER BY name, id`,
+            {$id: dependentPkgId}
+        )
+
+        const result: Package[] = []
+        for (let rec of recs) {
+            result.push(packageSchema.parse(dropNullFields(rec)))
+        }
+        return result
     }
 
     async findRootPackageGraph(): Promise<PackageGraph> {
@@ -127,7 +170,7 @@ export class PackageSqlService implements IPackageQrySvc, IPackageCmdSvc {
 
         const result: Package[] = []
         for (let rec of recs) {
-            result.push(packageSchema.parse(dropNulls(rec)))
+            result.push(packageSchema.parse(dropNullFields(rec)))
         }
         return result
     }
@@ -151,4 +194,5 @@ export class PackageSqlService implements IPackageQrySvc, IPackageCmdSvc {
 
         this.db.db.run(sql, bindings)
     }
+
 }
